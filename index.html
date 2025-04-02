@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL 2024 Live Streaming | Watch Free Cricket Matches</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --primary-dark: #e85a24;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #ffffff;
+            --gray: #2a2a2a;
+            --light-gray: #3a3a3a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .logo i {
+            color: var(--primary);
+            font-size: 2.5rem;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, var(--primary), #ff9e1b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .match-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .vs {
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stream-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+            background: var(--darker);
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .stream-quality {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .quality-btn {
+            padding: 8px 15px;
+            background: var(--gray);
+            border: none;
+            border-radius: 20px;
+            color: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .quality-btn.active {
+            background: var(--primary);
+            font-weight: bold;
+        }
+        
+        .quality-btn:hover {
+            background: var(--light-gray);
+        }
+        
+        .ad-container {
+            background: var(--gray);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 25px 0;
+            text-align: center;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ad-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .telegram-card {
+            background: linear-gradient(135deg, #0088cc, #25a3e0);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.3);
+        }
+        
+        .telegram-card h2 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .telegram-card p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .btn-telegram {
+            background: white;
+            color: #0088cc;
+        }
+        
+        .btn-telegram:hover {
+            background: #f0f0f0;
+        }
+        
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .popup {
+            background: var(--darker);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .popup-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .popup h2 {
+            margin-bottom: 15px;
+        }
+        
+        .popup p {
+            margin-bottom: 25px;
+            color: #ccc;
+        }
+        
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp {
+            background: #25D366;
+        }
+        
+        .telegram {
+            background: #0088cc;
+        }
+        
+        .facebook {
+            background: #3b5998;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .match-info {
+                gap: 15px;
+            }
+            
+            .telegram-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-tv"></i>
+                <h1>IPL 2024 Live Streaming</h1>
+            </div>
+            <p>Watch all matches for free in HD quality</p>
+            
+            <div class="match-info">
+                <div class="team">
+                    <div class="team-logo">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <span>Mumbai Indians</span>
+                </div>
+                
+                <div class="vs">VS</div>
+                
+                <div class="team">
+                    <div class="team-logo">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <span>Chennai Super Kings</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="stream-container">
+            <div class="video-wrapper">
+                <iframe id="streamFrame" src="https://iframv3.embedxt.site/iframe/frame.php?autoplay=1" allow="autoplay; fullscreen" frameborder="0"></iframe>
+            </div>
+            
+            <div class="stream-quality">
+                <button class="quality-btn active">HD 720p</button>
+                <button class="quality-btn">SD 480p</button>
+                <button class="quality-btn">Low 360p</button>
+            </div>
+        </div>
+        
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <p>Support us by viewing this ad</p>
+            </div>
+        </div>
+        
+        <div class="telegram-card">
+            <h2><i class="fab fa-telegram"></i> Join Our Telegram</h2>
+            <p>Get instant updates on live matches, streaming links, and match highlights directly on Telegram.</p>
+            <a href="https://t.me/yourchannel" class="btn btn-telegram" target="_blank">Join Channel</a>
+        </div>
+        
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <p>Support us by viewing this ad</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="popup-overlay" id="sharePopup">
+        <div class="popup">
+            <span class="popup-close" onclick="closePopup()">×</span>
+            <div class="popup-icon">
+                <i class="fas fa-share-alt"></i>
+            </div>
+            <h2>Continue Watching</h2>
+            <p>You've watched 2 minutes of the match. Share this link to unlock full access.</p>
+            <button class="btn" onclick="shareToUnlock()">Continue Watching</button>
+            
+            <div class="social-share">
+                <a href="#" class="social-btn whatsapp" onclick="shareOnWhatsApp()">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="#" class="social-btn telegram" onclick="shareOnTelegram()">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="#" class="social-btn facebook" onclick="shareOnFacebook()">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check if user has already shared
+        let hasShared = localStorage.getItem("shared") === "true";
+        
+        // Show popup after 2 minutes if not shared
+        if (!hasShared) {
+            setTimeout(() => {
+                document.getElementById("sharePopup").classList.add("active");
+            }, 120000); // 2 minutes
+        }
+        
+        // Close popup
+        function closePopup() {
+            document.getElementById("sharePopup").classList.remove("active");
+        }
+        
+        // Share functions
+        function shareToUnlock() {
+            // Default share action
+            shareOnWhatsApp();
+        }
+        
+        function shareOnWhatsApp() {
+            const shareUrl = encodeURIComponent(window.location.href);
+            const message = encodeURIComponent("Watch IPL 2024 Live for Free: ");
+            window.open(`https://api.whatsapp.com/send?text=${message}${shareUrl}`, '_blank');
+            
+            unlockStream();
+        }
+        
+        function shareOnTelegram() {
+            const shareUrl = encodeURIComponent(window.location.href);
+            const message = encodeURIComponent("Watch IPL 2024 Live for Free: ");
+            window.open(`https://t.me/share/url?url=${shareUrl}&text=${message}`, '_blank');
+            
+            unlockStream();
+        }
+        
+        function shareOnFacebook() {
+            const shareUrl = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, '_blank');
+            
+            unlockStream();
+        }
+        
+        function unlockStream() {
+            localStorage.setItem("shared", "true");
+            closePopup();
+        }
+        
+        // Quality selector functionality
+        const qualityBtns = document.querySelectorAll('.quality-btn');
+        qualityBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                qualityBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Here you would change the stream quality
+                // For demonstration, we'll just show an alert
+                alert(`Switching to ${btn.textContent} quality...`);
+            });
+        });
+    </script>
+</body>
+</html>
