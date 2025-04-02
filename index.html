@@ -113,6 +113,42 @@
             overflow: hidden;
         }
         
+        .thumbnail-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail-container:hover .play-button {
+            transform: scale(1.1);
+        }
+        
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 107, 53, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button i {
+            color: white;
+            font-size: 2.5rem;
+            margin-left: 5px;
+        }
+        
         .video-wrapper iframe {
             position: absolute;
             top: 0;
@@ -120,6 +156,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            display: none;
         }
         
         .stream-quality {
@@ -190,6 +227,29 @@
         .telegram-card p {
             margin-bottom: 20px;
             opacity: 0.9;
+        }
+        
+        .language-toggle {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .language-btn {
+            background: none;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-btn.active {
+            background: var(--primary);
+            font-weight: bold;
         }
         
         .btn {
@@ -324,6 +384,15 @@
             .telegram-card {
                 padding: 20px;
             }
+            
+            .play-button {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .play-button i {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -332,7 +401,7 @@
         <header>
             <div class="logo">
                 <i class="fas fa-tv"></i>
-                <h1>IPL 2024 Live Streaming</h1>
+                <h1>IPL 2025 Live Streaming</h1>
             </div>
             <p>Watch all matches for free in HD quality</p>
             
@@ -357,7 +426,15 @@
         
         <div class="stream-container">
             <div class="video-wrapper">
-                <iframe id="streamFrame" src="https://iframv3.embedxt.site/iframe/frame.php?autoplay=1" allow="autoplay; fullscreen" frameborder="0"></iframe>
+                <!-- Thumbnail with play button -->
+                <div class="thumbnail-container" id="thumbnail" style="background-image: url('https://example.com/ipl-thumbnail.jpg');">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                
+                <!-- Actual iframe (hidden initially) -->
+                <iframe id="streamFrame" src="" allow="autoplay; fullscreen" frameborder="0"></iframe>
             </div>
             
             <div class="stream-quality">
@@ -375,9 +452,15 @@
         </div>
         
         <div class="telegram-card">
-            <h2><i class="fab fa-telegram"></i> Join Our Telegram</h2>
-            <p>Get instant updates on live matches, streaming links, and match highlights directly on Telegram.</p>
-            <a href="https://t.me/yourchannel" class="btn btn-telegram" target="_blank">Join Channel</a>
+            <h2><i class="fab fa-telegram"></i> <span id="telegram-title">Join Our Telegram</span></h2>
+            <p id="telegram-desc">Get instant updates on live matches, streaming links, and match highlights directly on Telegram.</p>
+            
+            <div class="language-toggle">
+                <button class="language-btn active" onclick="setLanguage('en')">English</button>
+                <button class="language-btn" onclick="setLanguage('hi')">हिंदी</button>
+            </div>
+            
+            <a href="https://t.me/yourchannel" class="btn btn-telegram" target="_blank" id="telegram-btn">Join Channel</a>
         </div>
         
         <div class="ad-container">
@@ -394,9 +477,9 @@
             <div class="popup-icon">
                 <i class="fas fa-share-alt"></i>
             </div>
-            <h2>Continue Watching</h2>
-            <p>You've watched 2 minutes of the match. Share this link to unlock full access.</p>
-            <button class="btn" onclick="shareToUnlock()">Continue Watching</button>
+            <h2 id="popup-title">Continue Watching</h2>
+            <p id="popup-desc">You've watched 2 minutes of the match. Share this link to unlock full access.</p>
+            <button class="btn" onclick="shareToUnlock()" id="popup-btn">Continue Watching</button>
             
             <div class="social-share">
                 <a href="#" class="social-btn whatsapp" onclick="shareOnWhatsApp()">
@@ -413,47 +496,134 @@
     </div>
     
     <script>
+        // Language content
+        const content = {
+            en: {
+                telegram: {
+                    title: "Join Our Telegram",
+                    description: "Get instant updates on live matches, streaming links, and match highlights directly on Telegram.",
+                    button: "Join Channel"
+                },
+                popup: {
+                    title: "Continue Watching",
+                    description: "You've watched 2 minutes of the match. Share this link to unlock full access.",
+                    button: "Continue Watching"
+                },
+                shareMessage: "Watch IPL 2024 Live for Free: "
+            },
+            hi: {
+                telegram: {
+                    title: "हमारे टेलीग्राम से जुड़ें",
+                    description: "लाइव मैच, स्ट्रीमिंग लिंक और मैच हाइलाइट्स के तुरंत अपडेट के लिए टेलीग्राम से जुड़ें।",
+                    button: "चैनल जॉइन करें"
+                },
+                popup: {
+                    title: "वॉचिंग जारी रखें",
+                    description: "आपने 2 मिनट तक मैच देखा है। पूर्ण एक्सेस के लिए इस लिंक को शेयर करें।",
+                    button: "वॉचिंग जारी रखें"
+                },
+                shareMessage: "मुफ्त में देखें IPL 2024 लाइव: "
+            }
+        };
+
+        // Current language
+        let currentLanguage = 'en';
+        
+        // DOM Elements
+        const thumbnail = document.getElementById('thumbnail');
+        const streamFrame = document.getElementById('streamFrame');
+        const sharePopup = document.getElementById('sharePopup');
+        
+        // Language elements
+        const telegramTitle = document.getElementById('telegram-title');
+        const telegramDesc = document.getElementById('telegram-desc');
+        const telegramBtn = document.getElementById('telegram-btn');
+        const popupTitle = document.getElementById('popup-title');
+        const popupDesc = document.getElementById('popup-desc');
+        const popupBtn = document.getElementById('popup-btn');
+        
+        // Set language
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            updateContent();
+            
+            // Update active language button
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.language-btn[onclick="setLanguage('${lang}')"]`).classList.add('active');
+        }
+        
+        // Update content based on language
+        function updateContent() {
+            const langContent = content[currentLanguage];
+            
+            // Telegram card
+            telegramTitle.textContent = langContent.telegram.title;
+            telegramDesc.textContent = langContent.telegram.description;
+            telegramBtn.textContent = langContent.telegram.button;
+            
+            // Popup
+            popupTitle.textContent = langContent.popup.title;
+            popupDesc.textContent = langContent.popup.description;
+            popupBtn.textContent = langContent.popup.button;
+        }
+        
         // Check if user has already shared
         let hasShared = localStorage.getItem("shared") === "true";
         
-        // Show popup after 2 minutes if not shared
-        if (!hasShared) {
+        // Initialize the player
+        function initPlayer() {
+            // Hide thumbnail and show iframe
+            thumbnail.style.display = 'none';
+            streamFrame.style.display = 'block';
+            
+            // Set the stream source (with autoplay)
+            streamFrame.src = 'https://iframv3.embedxt.site/iframe/frame.php?autoplay=1';
+            
+            // Start the 2-minute timer if not shared
+            if (!hasShared) {
+                startShareTimer();
+            }
+        }
+        
+        // Start share timer (shows popup after 2 minutes)
+        function startShareTimer() {
             setTimeout(() => {
-                document.getElementById("sharePopup").classList.add("active");
+                sharePopup.classList.add('active');
             }, 120000); // 2 minutes
         }
         
+        // Thumbnail click handler
+        thumbnail.addEventListener('click', initPlayer);
+        
         // Close popup
         function closePopup() {
-            document.getElementById("sharePopup").classList.remove("active");
+            sharePopup.classList.remove('active');
         }
         
         // Share functions
         function shareToUnlock() {
-            // Default share action
             shareOnWhatsApp();
         }
         
         function shareOnWhatsApp() {
             const shareUrl = encodeURIComponent(window.location.href);
-            const message = encodeURIComponent("Watch IPL 2024 Live for Free: ");
+            const message = encodeURIComponent(content[currentLanguage].shareMessage);
             window.open(`https://api.whatsapp.com/send?text=${message}${shareUrl}`, '_blank');
-            
             unlockStream();
         }
         
         function shareOnTelegram() {
             const shareUrl = encodeURIComponent(window.location.href);
-            const message = encodeURIComponent("Watch IPL 2024 Live for Free: ");
+            const message = encodeURIComponent(content[currentLanguage].shareMessage);
             window.open(`https://t.me/share/url?url=${shareUrl}&text=${message}`, '_blank');
-            
             unlockStream();
         }
         
         function shareOnFacebook() {
             const shareUrl = encodeURIComponent(window.location.href);
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, '_blank');
-            
             unlockStream();
         }
         
@@ -474,6 +644,14 @@
                 alert(`Switching to ${btn.textContent} quality...`);
             });
         });
+        
+        // If already shared, start player immediately
+        if (hasShared) {
+            initPlayer();
+        }
+        
+        // Initialize language
+        setLanguage('en');
     </script>
 </body>
 </html>
