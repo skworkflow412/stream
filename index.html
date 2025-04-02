@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPL 2024 Live Streaming | Watch Free Cricket Matches</title>
+    <title>IPL 2025 Live Streaming | Watch Free Cricket Matches</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -198,6 +198,16 @@
             justify-content: center;
         }
         
+        .native-ad-container {
+            width: 100%;
+            max-width: 728px;
+            margin: 25px auto;
+            min-height: 250px;
+            background: var(--gray);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
         .ad-label {
             font-size: 0.8rem;
             color: #aaa;
@@ -227,29 +237,6 @@
         .telegram-card p {
             margin-bottom: 20px;
             opacity: 0.9;
-        }
-        
-        .language-toggle {
-            margin: 10px 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        .language-btn {
-            background: none;
-            border: none;
-            color: var(--light);
-            cursor: pointer;
-            font-size: 0.9rem;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-        
-        .language-btn.active {
-            background: var(--primary);
-            font-weight: bold;
         }
         
         .btn {
@@ -395,6 +382,8 @@
             }
         }
     </style>
+    <!-- Native Banner Ad Script -->
+    <script async="async" data-cfasync="false" src="//pl26275781.effectiveratecpm.com/a892742b9bed7cdfb224121d0d445a95/invoke.js"></script>
 </head>
 <body>
     <div class="container">
@@ -424,6 +413,11 @@
             </div>
         </header>
         
+        <!-- Native Banner Ad Container -->
+        <div class="native-ad-container">
+            <div id="container-a892742b9bed7cdfb224121d0d445a95"></div>
+        </div>
+        
         <div class="stream-container">
             <div class="video-wrapper">
                 <!-- Thumbnail with play button -->
@@ -452,15 +446,9 @@
         </div>
         
         <div class="telegram-card">
-            <h2><i class="fab fa-telegram"></i> <span id="telegram-title">Join Our Telegram</span></h2>
-            <p id="telegram-desc">Get instant updates on live matches, streaming links, and match highlights directly on Telegram.</p>
-            
-            <div class="language-toggle">
-                <button class="language-btn active" onclick="setLanguage('en')">English</button>
-                <button class="language-btn" onclick="setLanguage('hi')">हिंदी</button>
-            </div>
-            
-            <a href="https://t.me/yourchannel" class="btn btn-telegram" target="_blank" id="telegram-btn">Join Channel</a>
+            <h2><i class="fab fa-telegram"></i> Join Our Telegram</h2>
+            <p>Get instant updates on live matches, streaming links, and match highlights directly on Telegram.</p>
+            <a href="https://t.me/yourchannel" class="btn btn-telegram" target="_blank">Join Channel</a>
         </div>
         
         <div class="ad-container">
@@ -477,9 +465,9 @@
             <div class="popup-icon">
                 <i class="fas fa-share-alt"></i>
             </div>
-            <h2 id="popup-title">Continue Watching</h2>
-            <p id="popup-desc">You've watched 2 minutes of the match. Share this link to unlock full access.</p>
-            <button class="btn" onclick="shareToUnlock()" id="popup-btn">Continue Watching</button>
+            <h2>Continue Watching</h2>
+            <p>You've watched 2 minutes of the match. Share this link to unlock full access.</p>
+            <button class="btn" onclick="shareToUnlock()">Continue Watching</button>
             
             <div class="social-share">
                 <a href="#" class="social-btn whatsapp" onclick="shareOnWhatsApp()">
@@ -496,78 +484,10 @@
     </div>
     
     <script>
-        // Language content
-        const content = {
-            en: {
-                telegram: {
-                    title: "Join Our Telegram",
-                    description: "Get instant updates on live matches, streaming links, and match highlights directly on Telegram.",
-                    button: "Join Channel"
-                },
-                popup: {
-                    title: "Continue Watching",
-                    description: "You've watched 2 minutes of the match. Share this link to unlock full access.",
-                    button: "Continue Watching"
-                },
-                shareMessage: "Watch IPL 2024 Live for Free: "
-            },
-            hi: {
-                telegram: {
-                    title: "हमारे टेलीग्राम से जुड़ें",
-                    description: "लाइव मैच, स्ट्रीमिंग लिंक और मैच हाइलाइट्स के तुरंत अपडेट के लिए टेलीग्राम से जुड़ें।",
-                    button: "चैनल जॉइन करें"
-                },
-                popup: {
-                    title: "वॉचिंग जारी रखें",
-                    description: "आपने 2 मिनट तक मैच देखा है। पूर्ण एक्सेस के लिए इस लिंक को शेयर करें।",
-                    button: "वॉचिंग जारी रखें"
-                },
-                shareMessage: "मुफ्त में देखें IPL 2024 लाइव: "
-            }
-        };
-
-        // Current language
-        let currentLanguage = 'en';
-        
         // DOM Elements
         const thumbnail = document.getElementById('thumbnail');
         const streamFrame = document.getElementById('streamFrame');
         const sharePopup = document.getElementById('sharePopup');
-        
-        // Language elements
-        const telegramTitle = document.getElementById('telegram-title');
-        const telegramDesc = document.getElementById('telegram-desc');
-        const telegramBtn = document.getElementById('telegram-btn');
-        const popupTitle = document.getElementById('popup-title');
-        const popupDesc = document.getElementById('popup-desc');
-        const popupBtn = document.getElementById('popup-btn');
-        
-        // Set language
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            updateContent();
-            
-            // Update active language button
-            document.querySelectorAll('.language-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`.language-btn[onclick="setLanguage('${lang}')"]`).classList.add('active');
-        }
-        
-        // Update content based on language
-        function updateContent() {
-            const langContent = content[currentLanguage];
-            
-            // Telegram card
-            telegramTitle.textContent = langContent.telegram.title;
-            telegramDesc.textContent = langContent.telegram.description;
-            telegramBtn.textContent = langContent.telegram.button;
-            
-            // Popup
-            popupTitle.textContent = langContent.popup.title;
-            popupDesc.textContent = langContent.popup.description;
-            popupBtn.textContent = langContent.popup.button;
-        }
         
         // Check if user has already shared
         let hasShared = localStorage.getItem("shared") === "true";
@@ -609,14 +529,14 @@
         
         function shareOnWhatsApp() {
             const shareUrl = encodeURIComponent(window.location.href);
-            const message = encodeURIComponent(content[currentLanguage].shareMessage);
+            const message = encodeURIComponent("Watch IPL 2024 Live for Free: ");
             window.open(`https://api.whatsapp.com/send?text=${message}${shareUrl}`, '_blank');
             unlockStream();
         }
         
         function shareOnTelegram() {
             const shareUrl = encodeURIComponent(window.location.href);
-            const message = encodeURIComponent(content[currentLanguage].shareMessage);
+            const message = encodeURIComponent("Watch IPL 2024 Live for Free: ");
             window.open(`https://t.me/share/url?url=${shareUrl}&text=${message}`, '_blank');
             unlockStream();
         }
@@ -649,9 +569,6 @@
         if (hasShared) {
             initPlayer();
         }
-        
-        // Initialize language
-        setLanguage('en');
     </script>
 </body>
 </html>
